@@ -2,18 +2,38 @@
 
 namespace App\Http\Livewire\Penjualan;
 
+use App\Helpers\PenjualanHelper;
 use Livewire\Component;
-use App\Models\Penjualan;
-use App\Models\PenjualanDet;
 
 class Form extends Component
 {
-    public $penjualanDet = [];
-    public $form = [
-        'customer' => '',
-        'tanggal' => ''
+    public $penjualanDet;
+    public $grandTotal;
+    public $customer;
+    public $tanggal;
+
+    protected $rules = [
+        'customer' => 'required|min:6',
+        'tanggal' => 'required',
+        'penjualanDet' => 'required'
     ];
-    public $grandTotal = 0;
+
+    public function __construct()
+    {
+        $this->setDefault();
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function setDefault() {
+        $this->penjualanDet = [];
+        $this->grandTotal = 0;
+        $this->customer = '';
+        $this->tanggal = '';
+    }
 
     public function addDetail() {
         array_push($this->penjualanDet, [
@@ -38,20 +58,17 @@ class Form extends Component
     }
 
     public function save() {
-        $penjualanModel = new Penjualan;
+        $this->validate();
 
-        $penjualanModel->customer = $this->form['customer'] ?? '';
-        $penjualanModel->tanggal = $this->form['tangal'] ?? date('Y-m-d');
-        $penjualanModel->save();
+        $helper = new PenjualanHelper();
+        $helper->setCustomer($this->customer ?? '')
+                ->setTanggal($this->tangal ?? date('Y-m-d'))
+                ->setDetail($this->penjualanDet)
+                ->store();
+        
+        session()->flash('message', 'Penjualan berhasil disimpan !');
 
-        foreach($this->penjualanDet as $key => $val) {
-            $penjualanDetModel = new PenjualanDet();
-            $penjualanDetModel->penjualan_id = $penjualanModel->id;
-            $penjualanDetModel->barang = $val['barang'];
-            $penjualanDetModel->harga = $val['harga'];
-            $penjualanDetModel->jumlah = $val['jumlah'];
-            $penjualanDetModel->save();
-        }
+        $this->setDefault();
     }
 
     public function render()
