@@ -28,8 +28,8 @@
                                     <td>{{ date('d-m-Y', strtotime($val->tanggal)) }}</td>
                                     <td>{{$val->customer}}</td>
                                     <td class="text-right">
-                                        <button class="btn btn-primary"
-                                            onclick="edit({{ $val->id }})">Edit</button>
+                                        <button class="btn btn-primary" wire:click="$emitTo('form', 'addDetail')" onclick="edit()">Edit</button>
+                                        <!-- <button class="btn btn-primary" onclick="edit()">Edit</button> -->
                                         <button class="btn btn-danger">Delete</button>
                                     </td>
                                 </tr>

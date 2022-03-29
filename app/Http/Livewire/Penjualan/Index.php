@@ -11,6 +11,7 @@ class Index extends Component
     use WithPagination;
 
     public $kataKunci;
+    public $penjualanId;
 
     public function updatingKataKunci()
     {

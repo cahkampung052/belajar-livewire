@@ -11,6 +11,7 @@ class Form extends Component
     public $grandTotal;
     public $customer;
     public $tanggal;
+    public $title = 'Tambah Penjualan';
 
     protected $rules = [
         'customer' => 'required|min:6',
@@ -42,6 +43,7 @@ class Form extends Component
             'harga' => 0,
             'sub_total' => 0,
         ]);
+        var_dump('asd');
     }
 
     public function removeDetail($key) {
@@ -71,8 +73,12 @@ class Form extends Component
         $this->setDefault();
     }
 
+    public function setDetail() {
+
+    }
+
     public function render()
     {
-        return view('livewire.penjualan.form');
+        return view('livewire.penjualan.form', ['title' => $this->title]);
     }
 }

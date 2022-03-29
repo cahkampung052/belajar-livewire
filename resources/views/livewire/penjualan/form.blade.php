@@ -1,6 +1,6 @@
 <div>
     <div class="card">
-        <div class="card-header">Tambah Penjualan</div>
+        <div class="card-header">{{ $title }}</div>
         <div class="card-body">
             <div class="row">
                 @if (session()->has('message'))
